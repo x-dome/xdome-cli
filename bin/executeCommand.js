@@ -39,10 +39,10 @@ const printUnknownCommandErrorMessage = function() {
     const message = "xdome: '" + commandName  + "' is not an xdome command. See 'xdome help'."
     printMessage(message);
 };
-const printMessage = function(/*message*/) {
-    // console.log('');
-    // console.log(message);
-    // console.log('');
+const printMessage = function(message) {
+    console.log('');
+    console.log(message);
+    console.log('');
 };
 
 const init = function() {
@@ -55,7 +55,7 @@ const init = function() {
             Main[commandName][commands[commandName].defaultMethod](...commandParameters)
         }
         catch(e){
-            // console.log(e)
+            console.log(e)
             printMessage("xdome: an unexpected error ocurred.")
         }
     }
