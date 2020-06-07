@@ -1,6 +1,7 @@
 "use strict";
 
 const util = require("fs");
+const fse = require("fs-extra");
 
 class Helper {
     constructor(){
@@ -29,7 +30,6 @@ class Helper {
         this.convertFirstCharactertoUppercaseRestLowercase = function(string) {
             return string.charAt(0).toUpperCase() + string.toLowerCase().slice(1);
         }
-
     
         this.isCurrentDirectoryRootFolder = function(){
             if (util.existsSync(process.cwd()+'/package.json')) {
@@ -85,6 +85,33 @@ class Helper {
             return { sucess: true, message: 'new directory name is valid'};
         }
 
+        //////////////////////////////////////////////////////////////////////
+
+
+        this.getPluginBlueprint = function(){
+            return fse.readJsonSync('./pluginBlueprint.json');
+        }
+
+        this.validateCommandParameters = function(){
+
+
+        }
+
+        this.setFileParameters = function(){
+            let self = this; 
+            // placeholder ==> value
+        }
+
+        this.customiceFileTemplate = function(){
+
+
+        }
+
+
+        this.createFileContentFromFileTemplate = function(){
+
+
+        }
 
         this.createFile = function(filePath, fileContent, config) {
             console.log('executing createFile function')
@@ -98,6 +125,61 @@ class Helper {
             });
         }
 
+        this.createFileSystemFromBluePrint = function(bluprintObject){
+            Object.keys(bluprintObject).forEach(function (key) {
+        
+                if (bluprintObject[key] !== null 
+                    && typeof bluprintObject[key] === 'object' 
+                    && key === 'children' ) {
+        
+                    bluprintObject[key].forEach(function(itm, idx){
+        
+                        if(itm.hasOwnProperty('type')){
+                            console.log('has own property type')
+
+                            if (itm.type === 'dir') {
+                                // create dir
+                                
+                                // const dir = '/tmp/this/path/does/not/exist'
+                                // fs.ensureDirSync(dir)
+                                // // dir has now been created, including the directory it is to be placed in
+                                console.log('creating dir ' + itm.name);
+                                const dirPath = process.cwd() + '/' + itm.name;
+                                fse.ensureDirSync(dirPath)
+                                createPluginFromBluePrint(itm);
+                            }
+                            else if (itm.type === 'file'){
+                                // create file from template
+                                console.log('creating file ' + itm.name);
+
+
+                                // customiceFileTemplate
+                                    // setFileParameters
+                                    
+                                // createFileContentFromFileTemplate
+
+
+                                // createFile
+                            }
+
+                        }
+
+                    });
+                }
+
+            });
+        }
+
+    }
+
+
+
+}
+
+module.exports = new Helper();
+
+
+
         // this.createDir = function(fullPath) {
         //     printSpacedMessage('creating directory')
         //     util.mkdir(fullPath, {recursive:true}, function(error){
@@ -108,14 +190,23 @@ class Helper {
         //             return fullPath; 
         //         }
         //     });
-        // };        
+        // };       
+        
+        
+
+        // CREATE DIR
+        // const dir = '/tmp/this/path/does/not/exist'
+        // fs.ensureDirSync(dir)
+        // // dir has now been created, including the directory it is to be placed in
+
+        // CREATE FILE
+        // const file = '/tmp/this/path/does/not/exist/file.txt'
+        // fs.ensureFileSync(file)
+            // // file has now been created, including the directory it is to be placed in
+
+        // READ JSON FILE
+        // const packageObj = fs.readJsonSync('./package.json')
+            // console.log(packageObj.version) // => 2.0.0
 
 
-
-    }
-
-
-
-}
-
-module.exports = new Helper();
+        // pathExistsSync(file)
