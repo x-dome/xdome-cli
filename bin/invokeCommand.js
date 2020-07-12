@@ -24,6 +24,8 @@ const init = function() {
         Main[commandName].init(...commandParameters)
     }
     catch(e){
+
+        console.log(e)
         HELPER.printSpacedMessage("xdome: and unexpected error ocurred.")
     }
 };

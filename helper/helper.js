@@ -41,8 +41,10 @@ class Helper {
         this.destinationFolderExists = function(destinationPath){
             let destPath = destinationPath,
                 fullPath = process.cwd()+ destPath
+            // console.log(fullPath)
             if (util.existsSync(fullPath)) {
                 // console.log('destination folder exists')
+                // console.log(fullPath)
                 return { success: true, message: 'destination folder already exists' }
             }
             // console.log('destination folder doesnt exist')
@@ -88,8 +90,8 @@ class Helper {
         //////////////////////////////////////////////////////////////////////
 
 
-        this.getPluginBlueprint = function(){
-            return fse.readJsonSync('./pluginBlueprint.json');
+        this.getFileSystemBlueprint = function(basePath){
+            return fse.readJsonSync(basePath+'/fileSystemBlueprint.json');
         }
 
         this.validateCommandParameters = function(){
@@ -125,50 +127,97 @@ class Helper {
             });
         }
 
-        this.createFileSystemFromBluePrint = function(bluprintObject){
-            Object.keys(bluprintObject).forEach(function (key) {
+        this.createFileSystemElements  = function(itm){
+
+            // ask for elements property and iterate it
+
+            // on each element, execute creation of, either:
+            //         - file
+            //         - folder
         
-                if (bluprintObject[key] !== null 
-                    && typeof bluprintObject[key] === 'object' 
-                    && key === 'children' ) {
+            // when done, ask for children property
+            //     if has property child_element and iterate it 
         
-                    bluprintObject[key].forEach(function(itm, idx){
+            //     on each child_element, execute creation of, either:
+            //         - file
+            //         - folder
+            console.log("executing createFileSystemFromBluePrint")
+
+            // EXECUTE CREATE ELEMENT FUNCTION
+            if (itm.hasOwnProperty('type') && itm.type === 'dir') { 
+
+                //    // create dir
+                            
+                //    // const dir = '/tmp/this/path/does/not/exist'
+                //    // fs.ensureDirSync(dir)
+                //    // // dir has now been created, including the directory it is to be placed in
+                //    console.log('creating dir ' + itm.name);
+                //    const dirPath = process.cwd() + '/' + itm.name;
+                //    fse.ensureDirSync(dirPath)
+
+                //    createFileSystemFromBluePrint(itm);
+
+            }
+
+            if (itm.hasOwnProperty('type') && itm.type === 'file'){ 
+            
+                // customiceFileTemplate
+                    // setFileParameters
+
+                // createFileContentFromFileTemplate
+
+                // createFile
+
+            } 
+
+            // AND ASK FOR CHILD ELEMENTS
+                // IF CHILD ELEMENTS 
+                    // ITERATE 
+            // EXECUTE CREATE ELEMENT FUNCTION
+            if (itm.hasOwnProperty('child_elements')) {
+                itm.child_elements.forEach(function(subItm, subIdx){
+                    this.createFileSystemElements(subItm)
+                })
+            }
+
+        };
+
+        this.createFileSystemFromBluePrint = function(
+                bluprintObject,
+                commandParametersArray, 
+                parametersValues
+            ){
+
+            console.log(bluprintObject)
+            console.log(commandParametersArray)
+            console.log(parametersValues)
+
+            return;
         
-                        if(itm.hasOwnProperty('type')){
-                            console.log('has own property type')
+            let elements = bluprintObject.elements || []; 
+            if (elements.length == 0 ){
+                return console.log('no actions to perform for this plugin template. check the plugin template structure')
+            }
 
-                            if (itm.type === 'dir') {
-                                // create dir
-                                
-                                // const dir = '/tmp/this/path/does/not/exist'
-                                // fs.ensureDirSync(dir)
-                                // // dir has now been created, including the directory it is to be placed in
-                                console.log('creating dir ' + itm.name);
-                                const dirPath = process.cwd() + '/' + itm.name;
-                                fse.ensureDirSync(dirPath)
-                                createPluginFromBluePrint(itm);
-                            }
-                            else if (itm.type === 'file'){
-                                // create file from template
-                                console.log('creating file ' + itm.name);
+            // ABSTRAER ESTA BIFURCACIÓN A UNA FUNCION SEPARADA PARA PODER INVOCARLA
+            // TANTAS VECES COMO SEA NECESARIO
 
+            // let valueMarkersObj = {
+            //     "MODULE_NAME": "",
+            //     "ACCESS_POINT_FILE_NAME": "",
+            //     "ACCESS_POINT_ALLOWED_VERBS": [],
+            //     "ACCESS_POINT_ROUTE_PATH": "",
+            //     "ACCESS_POINT_CLASS_NAME": "",
+            //     "BUSINESS_LAYER_CLASS_NAME": ""
+            // };
 
-                                // customiceFileTemplate
-                                    // setFileParameters
-                                    
-                                // createFileContentFromFileTemplate
-
-
-                                // createFile
-                            }
-
-                        }
-
-                    });
-                }
-
-            });
+            elements.forEach(function(itm, idx){
+                this.createFileSystemElements(itm)
+            })
+                    
         }
+
+
 
     }
 
@@ -178,35 +227,3 @@ class Helper {
 
 module.exports = new Helper();
 
-
-
-        // this.createDir = function(fullPath) {
-        //     printSpacedMessage('creating directory')
-        //     util.mkdir(fullPath, {recursive:true}, function(error){
-        //         if (error) {
-        //             console.log('an error ocurre while trying to create the directory folder')
-        //         }
-        //         else {
-        //             return fullPath; 
-        //         }
-        //     });
-        // };       
-        
-        
-
-        // CREATE DIR
-        // const dir = '/tmp/this/path/does/not/exist'
-        // fs.ensureDirSync(dir)
-        // // dir has now been created, including the directory it is to be placed in
-
-        // CREATE FILE
-        // const file = '/tmp/this/path/does/not/exist/file.txt'
-        // fs.ensureFileSync(file)
-            // // file has now been created, including the directory it is to be placed in
-
-        // READ JSON FILE
-        // const packageObj = fs.readJsonSync('./package.json')
-            // console.log(packageObj.version) // => 2.0.0
-
-
-        // pathExistsSync(file)

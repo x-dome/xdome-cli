@@ -1,50 +1,63 @@
 {
-    "fileSystemBlueprint": {
-
-        
-        "rootDir": "/src",
-        "type": "dir",
-        "name": "modules",
-        "children": [
-            {
-                "type": "dir",
-                "name": {
-                    "valueMarker": "MODULE_NAME"
-                },
-                "children": [
-                    {
-                        "type": "file",
-                        "name": {
-                            "valueMarker": "ACCESS_POINT_FILE_NAME"
-                        },
-                        "template_id": "ID_accessPoint",
-                        "params": [
-                            { "command": "--verbs", "placeholder" : "{verbs}",     "valueMarker" : "ACCESS_POINT_ALLOWED_VERBS" }, 
-                            { "command": "--route", "placeholder" : "{route}",     "valueMarker" : "ACCESS_POINT_ROUTE_PATH" }, 
-                            { "command": false,     "placeholder" : "{className}", "valueMarker" : "ACCESS_POINT_CLASS_NAME" }
-                        ]
+    "rootDir": "/src/modules",
+    "elements": [
+        {
+            "type": "folder",
+            "name": {  
+                "valueMarker": "MODULE_NAME"
+            },
+            "child_elements": [
+                {
+                    "type": "file",
+                    "name": {
+                        "valueMarker": "ACCESS_POINT_FILE_NAME"
                     },
-                    {
-                        "type": "file",
-                        "name": "businessLayer",
-                        "template_id": "ID_accessPoint",
-                        "params": [
-                            { "command": false,     "placeholder" : "{className}",  "valueMarker" : "BUSINESS_LAYER_CLASS_NAME" }
-                        ]
-                    }
-                ]
-            }
-        ]
-        ,
-        "valueMarkers": {
-            "MODULE_NAME": "",
-            "ACCESS_POINT_FILE_NAME": "",
-            "ACCESS_POINT_ALLOWED_VERBS": [],
-            "ACCESS_POINT_ROUTE_PATH": "",
-            "ACCESS_POINT_CLASS_NAME": "",
-            "BUSINESS_LAYER_CLASS_NAME": "",
+                    "template_id": "ID_accessPoint",
+                    "params": [
+                        {   
+                            "command": "--verbs", 
+                            "placeholder" : "{verbs}",     
+                            "valueMarker" : "ACCESS_POINT_ALLOWED_VERBS" 
+                        }, 
+                        {   
+                            "command": "--route", 
+                            "placeholder" : "{route}",     
+                            "valueMarker" : "ACCESS_POINT_ROUTE_PATH" 
+                        }, 
+                        {   
+                            "command": false,     
+                            "placeholder" : "{className}", 
+                            "valueMarker" : "ACCESS_POINT_CLASS_NAME" 
+                        }
+                    ]
+                },
+                {
+                    "type": "file",
+                    "name": "businessLayer",
+                    "template_id": "ID_accessPoint",
+                    "params": [
+                        {   
+                            "command": false,     
+                            "placeholder" : "{className}",  
+                            "valueMarker" : "BUSINESS_LAYER_CLASS_NAME" 
+                        }
+                    ]
+                },
+                {
+                    "type": "folder",
+                    "name": "dummy_folder"
+                }
+            ]
         }
-
-
+    ]
+    ,
+    "valueMarkers": {
+        "MODULE_NAME": "",
+        "ACCESS_POINT_FILE_NAME": "",
+        "ACCESS_POINT_ALLOWED_VERBS": [],
+        "ACCESS_POINT_ROUTE_PATH": "",
+        "ACCESS_POINT_CLASS_NAME": "",
+        "BUSINESS_LAYER_CLASS_NAME": ""
     }
 }
+
