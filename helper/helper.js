@@ -127,6 +127,10 @@ class Helper {
             });
         }
 
+        this.createDir = function(dirPath, dirName) {
+            console.log('executing createFolder function')
+        }
+
         this.createFileSystemElements  = function(itm){
 
             // ask for elements property and iterate it
@@ -143,30 +147,37 @@ class Helper {
             //         - folder
             console.log("executing createFileSystemFromBluePrint")
 
+
+
             // EXECUTE CREATE ELEMENT FUNCTION
             if (itm.hasOwnProperty('type') && itm.type === 'dir') { 
 
-                //    // create dir
-                            
-                //    // const dir = '/tmp/this/path/does/not/exist'
-                //    // fs.ensureDirSync(dir)
-                //    // // dir has now been created, including the directory it is to be placed in
-                //    console.log('creating dir ' + itm.name);
-                //    const dirPath = process.cwd() + '/' + itm.name;
-                //    fse.ensureDirSync(dirPath)
+                let dirName = ( 
+                    itm.hasOwnProperty('name') && 
+                    typeof itm.name === 'object' 
+                    && itm.name.hasOwnProperty('valueMarker')  )? itm.name.valueMarker: itm.name;
 
-                //    createFileSystemFromBluePrint(itm);
+                let dirPath = "???????????????????????????????????";
+                    
+                        //    // const dir = '/tmp/this/path/does/not/exist'
+                        //    // fs.ensureDirSync(dir)
+                        //    // // dir has now been created, including the directory it is to be placed in
+                        //    console.log('creating dir ' + itm.name);
+                        //    const dirPath = process.cwd() + '/' + itm.name;
+                        //    fse.ensureDirSync(dirPath)
+                
+                // TODO// this.createDir(dirPath, dirName);
 
             }
 
             if (itm.hasOwnProperty('type') && itm.type === 'file'){ 
             
-                // customiceFileTemplate
-                    // setFileParameters
+                // TODO // this.customiceFileTemplate
+                    // TODO // this.setFileParameters
 
-                // createFileContentFromFileTemplate
+                // TODO // this.createFileContentFromFileTemplate
 
-                // createFile
+                // TODO// this.createFile();
 
             } 
 
