@@ -6,6 +6,185 @@ const fse = require("fs-extra");
 class Helper {
     constructor(){
 
+        this.getFileSystemBlueprint = function(basePath){
+            return fse.readJsonSync(basePath+'/fileSystemBlueprint.json');
+        }
+
+        this.getFileTemplateByID = function(basePath, fileId){
+            let fileName = fileId // + '.js';
+            return require(basePath + '/templates/' + fileName);
+        }
+
+        // this.validateCommandParameters = function(){ }
+
+        this.createFile = function(filePath, fileContent, config) {
+            // console.log('executing createFile function')
+            fse.ensureFileSync( process.cwd() + filePath );
+            fse.writeFileSync(
+                process.cwd() + filePath,
+                fileContent //JSON.stringify(fileContent)
+            );
+        }
+            
+        this.createDir = function(dirPath, dirName) {
+            // console.log('executing createDir function')
+            // console.log(process.cwd() + '/' + dirPath + '/' + dirName)
+            fse.ensureDirSync( process.cwd() + '/' + dirPath + '/' + dirName     );
+        }
+
+        this.createFileSystemElements  = function(itm, currentDirPath, blueprintObject, cliParamsArr, pluginBasePath, currentIndex){
+
+            let self = this;
+            let valueMarkers = [];
+
+            if (cliParamsArr.length == 0 ) {
+                // handle missing params error
+            }
+            else{
+
+                if (blueprintObject.cliParamsConfig.length == 0) {                    
+                    // return // handle missing params error
+                }
+
+                cliParamsArr.forEach(function(cliParamItm, cliParamIdx){
+
+                    let paramConfig = blueprintObject.cliParamsConfig.filter(function(el) {
+                        let position = cliParamIdx + 1;
+                        return el.entryPosition === position;
+                    })[0];
+                    
+                    paramConfig.valueMarker.forEach(function(paramConfigItm, paramConfigIdx){
+                        let valuetoAdd = (paramConfig.hasOwnProperty('commandPrefix') && paramConfig.commandPrefix.length > 0)? 
+                        cliParamItm.replace( paramConfig.commandPrefix + "=" , "" ) : cliParamItm;
+
+                        let toAdd = {
+                            valueMarkerName : paramConfigItm, 
+                            value: valuetoAdd
+                        }
+                        valueMarkers.push(toAdd)
+                    })
+
+                });
+
+            }
+
+            if (itm.hasOwnProperty('type') && (itm.type === 'dir' || itm.type === 'folder') ) { 
+
+                let dirData = itm;
+
+                let dirName;
+
+                if ( dirData.hasOwnProperty('name') && typeof dirData.name === 'object' && dirData.name.hasOwnProperty('valueMarker') ) {
+
+                    dirName = valueMarkers.find(el => {
+                        return el.valueMarkerName === dirData.name.valueMarker
+                    }).value;
+
+                }
+                else{
+                    dirName = dirData.name;
+                };
+                    
+
+                let dirPath = currentDirPath;
+                                            
+                this.createDir(dirPath, dirName);
+
+
+                if (dirData.hasOwnProperty('child_elements')) {
+
+                    let nestedDirPath = dirPath + "/" + dirName;
+
+                    dirData.child_elements.forEach(function(subItm, subIdx){
+                        self.createFileSystemElements(subItm, nestedDirPath, blueprintObject, cliParamsArr, pluginBasePath, currentIndex+1)
+                    })
+
+                };
+
+            }
+            else if (itm.hasOwnProperty('type') && itm.type === 'file') { 
+                // console.log("itm.hasOwnProperty('type') && itm.type === 'file'");
+                let fileData = itm;
+                let templateFile;
+
+                let fileName;
+                let fileExtension = '';
+
+                if ( fileData.hasOwnProperty('fileExtension') ) {
+                    fileExtension = fileData.fileExtension;
+                }
+
+                if ( fileData.hasOwnProperty('name') && typeof fileData.name === 'object' && fileData.name.hasOwnProperty('valueMarker') ) {
+
+                    fileName = valueMarkers.find(el => {
+                        return el.valueMarkerName === fileData.name.valueMarker
+                    }).value;
+
+                }
+                else{
+                    fileName = fileData.name;
+                };
+
+                let templateId = ( fileData.hasOwnProperty('template_id') )? fileData.template_id: false;
+
+                if (templateId != undefined ) {
+                    templateFile = self.getFileTemplateByID(pluginBasePath, templateId)
+                }
+                else {
+                    // handle no templateId error
+                }
+
+                if (templateFile != undefined) {
+                    // handle error
+                }
+
+                if ( fileData.hasOwnProperty('params') && fileData.params.length > 0 ) {
+
+                    fileData.params.forEach(function(paramItm, paramIdx){
+                        
+                        let placeholder = paramItm.placeholder;
+
+                        let value = valueMarkers.find(el => {
+                            return el.valueMarkerName === paramItm.valueMarker
+                        }).value;
+
+                        templateFile = templateFile.replace(new RegExp(placeholder, 'g'), value );
+
+                    })
+
+                    let fileContent = templateFile;
+
+                    let filePath = currentDirPath + "/" + fileName + fileExtension;
+
+                    self.createFile(filePath, fileContent, {});
+                }
+
+            } 
+
+        };
+
+        this.createFileSystemFromBluePrint = function( pluginBasePath, blueprintObject, cliParamsArr ){
+
+            let self = this;
+
+            let elements = blueprintObject.elements || []; 
+            if (elements.length == 0 ){
+                return console.log('no actions to perform for this plugin template. check the plugin template structure. "elements" should be added there')
+            }
+
+            blueprintObject["cliParams"] = ( blueprintObject.hasOwnProperty('cliParams') )? blueprintObject.cliParams : [];
+
+            let currentDirPath = ( blueprintObject.hasOwnProperty('rootDir') )? blueprintObject.rootDir : '';
+
+            elements.forEach(function(itm, idx){
+                self.createFileSystemElements(itm, currentDirPath, blueprintObject, cliParamsArr, pluginBasePath, 0)
+            })
+                    
+        }
+
+
+        //////////////////////////////////////////////////////////////////////
+
         this.pass = function(){
             let message = 'this component is not yet implemented and will be available in a future release version';
             return console.log(message);
@@ -85,208 +264,11 @@ class Helper {
                 return { sucess: false, message: errorMessage };
             }
             return { sucess: true, message: 'new directory name is valid'};
-        }
-
-        //////////////////////////////////////////////////////////////////////
-
-
-        this.getFileSystemBlueprint = function(basePath){
-            return fse.readJsonSync(basePath+'/fileSystemBlueprint.json');
-        }
-
-        this.getFileTemplateByID = function(fileId){
-            let fileName = fileId + '.json';
-            return fse.readJsonSync(basePath+'/templates/' + fileName);
-        }
-
-        this.validateCommandParameters = function(){
-
-
-        }
-
-        this.setFileParameters = function(){
-            let self = this; 
-            // placeholder ==> value
-        }
-
-        this.customiceFileTemplate = function(){
-            // let verbs = (args[0]!=undefined)?args[0]:undefined;
-            // if(args[1]==undefined || args[2]==undefined){
-            //     return HELPER.printSpacedMessage("please make sure you entered the correct parameters. example: --verbs=[GET, POST, PUT] --route=exampleroute")
-            // }
-            // else{
-            //     args.forEach(function(itm, idx){
-            //         //verbs
-            //         if ( args[idx].includes( self.parameters[0].command+"=" ) ) {
-            //             console.log(self.parameters[0].command+"=")
-            //             console.log(args[idx])
-            //             self.parameters[0].value = args[idx].replace("--verbs=", "");
-            //         }
-            //         //route
-            //         if ( args[idx].includes( self.parameters[1].command+"=" ) ) {
-            //             console.log(self.parameters[1].command+"=")
-            //             console.log(args[idx])
-            //             self.parameters[1].value = args[idx].replace("--route=", "");
-            //         }
-            //     })
-            // }
-        }
-
-
-        this.createFileContentFromFileTemplate = function(){
-
-        }
-
-        this.createFile = function(filePath, fileContent, config) {
-            console.log('executing createFile function')
-            // util.writeFile( filePath, fileContent, (error) => {
-            //     if (error) {
-            //         console.error(error)
-            //     }
-            //     else {
-            //         console.log('file was made')
-            //     }
-            // });
-            fse.writeFileSync( filePath, fileContent, (error) => {
-                if (error) {
-                    console.error(error)
-                }
-                else {
-                    console.log('file was made')
-                }
-            });
-        }
-
-        this.createDir = function(dirPath, dirName) {
-            console.log('executing createFolder function')
-                    //    // const dir = '/tmp/this/path/does/not/exist'
-        //    // fs.ensureDirSync(dir)
-        //    // // dir has now been created, including the directory it is to be placed in
-        //    console.log('creating dir ' + itm.name);
-        //    const dirPath = process.cwd() + '/' + itm.name;
-        //    fse.ensureDirSync(dirPath)
-            fse.ensureDirSync(dirPath);
-        }
-
-        this.createFileSystemElements  = function(itm, currentDirPath){
-
-            // ask for elements property and iterate it
-
-            // on each element, execute creation of, either:
-            //         - file
-            //         - folder
-        
-            // when done, ask for children property
-            //     if has property child_element and iterate it 
-        
-            //     on each child_element, execute creation of, either:
-            //         - file
-            //         - folder
-            console.log("executing createFileSystemFromBluePrint")
-
-            // EXECUTE CREATE ELEMENT FUNCTION
-            if (itm.hasOwnProperty('type') && itm.type === 'dir') { 
-
-                let dirName = ( 
-                    itm.hasOwnProperty('name') && 
-                    typeof itm.name === 'object' 
-                    && itm.name.hasOwnProperty('valueMarker')  )? itm.name.valueMarker: itm.name;
-
-                let dirPath = currentDirPath;
-                                            
-                // TODO// 
-                this.createDir(dirPath, dirName);
-
-                // AND ASK FOR CHILD ELEMENTS
-                // IF CHILD ELEMENTS 
-                        // ITERATE 
-                // EXECUTE CREATE ELEMENT FUNCTION
-
-                if (itm.hasOwnProperty('child_elements')) {
-                    let nestedDirPath = dirPath + "/" + dirName;
-                    itm.child_elements.forEach(function(subItm, subIdx){
-                        this.createFileSystemElements(subItm, nestedDirPath)
-                    })
-                }
-
-            }
-
-            if (itm.hasOwnProperty('type') && itm.type === 'file'){ 
-                let fileName = false;
-                let templateId = false;
-                
-                fileName = ( 
-                    itm.hasOwnProperty('name') && 
-                    typeof itm.name === 'object' 
-                    && itm.name.hasOwnProperty('valueMarker')  )? itm.name.valueMarker: itm.name;
-
-
-                templateId = ( itm.hasOwnProperty('template_id') )? itm.template_id: false;
-
-                // "params": [
-                //     {   
-                //         "command": "--verbs", 
-                //         "placeholder" : "{verbs}",     
-                //         "valueMarker" : "ACCESS_POINT_ALLOWED_VERBS" 
-                //     }, 
-                //     {   
-                //         "command": "--route", 
-                //         "placeholder" : "{route}",     
-                //         "valueMarker" : "ACCESS_POINT_ROUTE_PATH" 
-                //     }, 
-                //     {   
-                //         "command": false,     
-                //         "placeholder" : "{className}", 
-                //         "valueMarker" : "ACCESS_POINT_CLASS_NAME" 
-                //     }
-                // ]      
-
-                // let valueMarkersObj = {
-                //     "MODULE_NAME": "",
-                //     "ACCESS_POINT_FILE_NAME": "",
-                //     "ACCESS_POINT_ALLOWED_VERBS": [],
-                //     "ACCESS_POINT_ROUTE_PATH": "",
-                //     "ACCESS_POINT_CLASS_NAME": "",
-                //     "BUSINESS_LAYER_CLASS_NAME": ""
-                // };
-                
-                // TODO // this.customiceFileTemplate
-                    // TODO // this.setFileParameters
-
-                // TODO // this.createFileContentFromFileTemplate
-
-                // TODO// this.createFile(filePath, fileContent, config);
-
-            } 
-
-        };
-
-        this.createFileSystemFromBluePrint = function(
-                bluprintObject,
-                commandParametersArray, 
-                parametersValues
-            ){
-
-            console.log(bluprintObject)
-            console.log(commandParametersArray)
-            console.log(parametersValues)
-        
-            let elements = bluprintObject.elements || []; 
-            if (elements.length == 0 ){
-                return console.log('no actions to perform for this plugin template. check the plugin template structure')
-            }
-
-            elements.forEach(function(itm, idx){
-                this.createFileSystemElements(itm, parametersValues.rootDir)
-            })
-                    
-        }
+        }        
 
 
 
     }
-
-
 
 }
 
