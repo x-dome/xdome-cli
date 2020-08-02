@@ -9,11 +9,9 @@
             "child_elements": [
                 {
                     "type": "file",
-                    "name": {
-                        "valueMarker": "ACCESS_POINT_FILE_NAME"
-                    },
+                    "name": "accessPoint",
                     "fileExtension": ".js",
-                    "template_id": "ID_accessPoint",
+                    "template_id": "accessPoint",
                     "params": [
                         {   
                             "placeholder" : "{verbs}",     
@@ -31,9 +29,9 @@
                 },
                 {
                     "type": "file",
-                    "name": "businessLayer",
+                    "name": "businessLogic",
                     "fileExtension": ".js",
-                    "template_id": "ID_accessPoint",
+                    "template_id": "businessLogic",
                     "params": [
                         {   
                             "placeholder" : "{className}",  

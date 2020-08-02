@@ -17,17 +17,17 @@
     "fs-extra": "^9.0.0",
     "jsonwebtoken": "^8.5.1",
     "nodegit": "^0.26.2",
-    "xdome-base": "file:../xdome/xdome-base/xdome-base-0.0.2.tgz"
+    "xdome-base-rest": "git+https://github.com/x-dome/xdome-base-rest.git#releases/0.x/v0.1.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "^8.2.0",
-    "@commitlint/config-conventional": "^8.2.0",
+    "@commitlint/cli": "^9.1.2",
+    "@commitlint/config-conventional": "^9.1.1",
     "chai": "^4.2.0",
-    "eslint": "^6.6.0",
-    "husky": "^3.0.9",
-    "mocha": "^6.2.2",
-    "nyc": "^14.1.1",
-    "rewire": "^4.0.1"
+    "eslint": "^7.6.0",
+    "husky": "^4.2.5",
+    "mocha": "^8.1.0",
+    "nyc": "^15.1.0",
+    "rewire": "^5.0.0"
   },
   "keywords": [
     "nodejs-base-server",
