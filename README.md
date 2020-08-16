@@ -1,6 +1,6 @@
-# Node Base Server Installer
+# xdome
 
-This npm library helps you to bootstrap a NodeJS + ExpressJS API-rest microservice.
+This npm module helps you to bootstrap a NodeJS + ExpressJS API-rest microservice.
 You can also use it to plug-in several components that add typical backend functionality, such as: 
 
 - adding new API-rest access points
