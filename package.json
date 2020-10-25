@@ -1,47 +1,20 @@
 {
-  "name": "xdome",
+  "name": "xdome-cli-tool",
   "version": "1.0.0",
-  "description": "this modules helps you to bootstrap a nodejs api rest server and plugin to the project several useful components for executing common server tasks such as db cruds, vnp connection handling, rest access points operations and so on.",
-  "main": "./lib/index.js",
-  "scripts": {
-    "test": "mocha --recursive",
-    "lint": "eslint .",
-    "coverage": "nyc --reporter=html --reporter=text --reporter=text-summary npm run test"
-  },
+  "description": "A simple Yargs CLI",
   "bin": {
-    "xdome": "./bin/invokeCommand.js"
-  },
-  "preferGlobal": true,
-  "dependencies": {
-    "axios": "^0.19.0",
-    "fs-extra": "^9.0.0",
-    "jsonwebtoken": "^8.5.1",
-    "nodegit": "^0.26.2",
-    "xdome-base": "file:../xdome/xdome-base/xdome-base-0.0.2.tgz"
-  },
-  "devDependencies": {
-    "@commitlint/cli": "^8.2.0",
-    "@commitlint/config-conventional": "^8.2.0",
-    "chai": "^4.2.0",
-    "eslint": "^6.6.0",
-    "husky": "^3.0.9",
-    "mocha": "^6.2.2",
-    "nyc": "^14.1.1",
-    "rewire": "^4.0.1"
+    "run": "./run.js"
   },
   "keywords": [
-    "nodejs-base-server",
-    "installer"
+    "cli"
   ],
-  "author": "Santiago De Simone",
+  "preferGlobal": true,
+  "author": "Christopher Kade",
   "license": "ISC",
-  "engines": {
-    "npm": "1.4.x"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint && npm run test",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
+  "dependencies": {
+    "fs-extra": "^9.0.1",
+    "xdome-base-rest": "git@github.com:x-dome/xdome-base-rest.git",
+    "xdome-extension-rest": "git@github.com:x-dome/xdome-extension-rest.git",
+    "yargs": "^16.0.3"
   }
 }
