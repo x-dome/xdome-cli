@@ -49,7 +49,7 @@ The following commands are now globally exposed for you to use them.
 
 Type the *create* command and hit enter:
 ``` 
-create
+create <<NAME>>
 ```
 Result will be printed in terminal.
 
