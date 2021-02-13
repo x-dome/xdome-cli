@@ -23,7 +23,7 @@ git clone <<GIT_URL>>
 
 **Navigate to the path where you want to create your application project.**
 
-**Type the *create* to create the project:**
+**Type the *create* command to create the project:**
 
 ``` 
 node "/PATH/TO/RUN/FILE/run.js" create <<PROJECT_NAME>>
