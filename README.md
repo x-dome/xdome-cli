@@ -11,17 +11,17 @@ You can also use it to plug-in several components that add typical backend funct
 For unix-based OS:
 
 
-**Clone the repository:**
+**Clone this repository:**
 
 ```
-git clone https://github.com/santidesimone/node-base-installer.git
+git clone <<GIT_URL>>
 ```
 
-**Enter the folder and execute a direct reference to de file "run.js", like this:**
+**Enter the to the project folder and COPY the path reference to the file "run.js", like this:**
 
-node "/PATH/TO/RUN/FILE/run.js" <<command>>
+"/PATH/TO/RUN/FILE/run.js" 
 
-**Navigate to the path where you want to create your application project**
+**Navigate to the path where you want to create your application project.**
 
 **Type the *create* to create the project:**
 
