@@ -17,7 +17,7 @@ require('yargs')
         })
   }, function (argv) {
 
-      const template_path = require("xdome-base-rest");
+      const template_path = require("@x-dome/xdome-base-rest");
       let projectName = argv.name;
       fse.copySync(template_path.dirname, "./"+projectName);
 

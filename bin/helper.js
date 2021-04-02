@@ -10,7 +10,7 @@ class Helper{
 
     createRestModule(options){
 
-        const template_path = require("xdome-extension-rest").paths;
+        const template_path = require("@x-dome/xdome-extension-rest").paths;
         let accessPointName = options.name;
         let accessPointVerbsArray = options.verbs;
         let accessPointNameRoute = options.route;
