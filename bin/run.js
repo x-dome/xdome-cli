@@ -1,99 +1,94 @@
 #!/usr/bin/env node
+"use strict";
 
 const Messages = new (require('./messages'));
 const Helper = new (require('./helper'));
 const fse = require('fs-extra');
-const fs = require('fs');
 
 // Crea nuevo projecto
 require('yargs')
-  .scriptName("project-creation")
-  .usage('$0 <cmd> [args]')
-  .command('create <name>', 'Creates a project', (yargs) => {
-      yargs.positional('name', {
-        type: 'string',
-        default: 'xdome-example',
-        describe: 'Project name'
+    .scriptName("project-creation")
+    .usage('$0 <cmd> [args]')
+    .command('create <name>', 'Creates a project', (yargs) => {
+        yargs.positional('name', {
+            type: 'string',
+            default: 'xdome-example',
+            describe: 'Project name',
         })
-  }, function (argv) {
+    }, function (argv) {
+        const template_path = require("@x-dome/xdome-base-rest");
+        let projectName = argv.name;
+        fse.copySync(template_path.dirname, "./"+projectName);
 
-      const template_path = require("@x-dome/xdome-base-rest");
-      let projectName = argv.name;
-      fse.copySync(template_path.dirname, "./"+projectName);
+        // eslint-disable-next-line one-var
+        let xdomeInfo = fse.readJsonSync( process.cwd() + "/" + projectName + '/xdome.json' );
+        xdomeInfo["basePath"] = "/"+projectName+"/api/";
+        fse.writeJsonSync( process.cwd() + "/" + projectName + '/xdome.json' , xdomeInfo, {spaces: 2} )
 
-      let xdomeInfo = fse.readJsonSync( process.cwd() + "/" + projectName + '/xdome.json' );
-      xdomeInfo["basePath"] = "/"+projectName+"/api/";
-      fse.writeJsonSync( process.cwd() + "/" + projectName + '/xdome.json' , xdomeInfo, {spaces: 2} )
-
-      Messages.onProjectCreated(argv.name, projectName);
-
-  })
-  .help()
-  .argv
+        Messages.onProjectCreated(argv.name, projectName);
+    })
+    .help()
+    .argv
 
 // Crea nuevo módulo REST
 require('yargs')
-  .usage('Usage: $0 <cmd> [options]') 
-  .command('add accesspoint', 'adds accesspoint ...' , (yargs) => { 
+    .usage('Usage: $0 <cmd> [options]')
+    .command('add accesspoint', 'adds accesspoint ...' , (yargs) => {
+        yargs.option('n', {
+            alias: 'name',
+            description: 'the name of the rest module',
+        }).demand('n')
 
-    yargs.option('n', {
-      alias: 'name',
-      description: 'the name of the rest module'
-    })
-    .demand('n') 
-  
-    yargs.option('v', { 
-      array: true, 
-      description: 'an array of strings',
-      alias: 'verbs'
-    })
-    .demand('v')
-    .alias('v', 'verbs')
-  
-    yargs.option('r', {
-      alias: 'route',
-      description: 'endpoint route'
-    })
-    .demand('r') 
-    .alias('route', 'r')
+        yargs.option('v', {
+            array: true,
+            description: 'an array of strings',
+            alias: 'verbs',
+        })
+            .demand('v')
+            .alias('v', 'verbs')
 
-  }, function (argv) {
+        yargs.option('r', {
+            alias: 'route',
+            description: 'endpoint route',
+        })
+            .demand('r')
+            .alias('route', 'r')
 
-    Helper.createRestModule({ 
-      name: argv.name , 
-      verbs: argv.verbs , 
-      route: argv.route 
+    }, function (argv) {
+
+        Helper.createRestModule({
+            name: argv.name,
+            verbs: argv.verbs,
+            route: argv.route,
+        })
     })
-
-  })
-  .help()
-  .argv
+    .help()
+    .argv
 
 // Crea módulos REST a partir de una definición Swagger en formato JSON (no YAML)
 require('yargs')
-.scriptName("project-creation")
-.usage('Usage: $0 <cmd> [options]')
-.command('add+ accesspoints', 'adds accesspoints reading a swagger json file', (yargs) => {
+    .scriptName("project-creation")
+    .usage('Usage: $0 <cmd> [options]')
+    .command('add+ accesspoints', 'adds accesspoints reading a swagger json file', (yargs) => {
 
-  yargs.option('r', {
-    alias: 'swaggerJson',
-    description: 'reference to a swagger json file'
-  })
-  .demand('j') 
-  .alias('swaggerJson', 'j')
+        yargs.option('r', {
+            alias: 'swaggerJson',
+            description: 'reference to a swagger json file',
+        })
+            .demand('j')
+            .alias('swaggerJson', 'j')
+    }, function (argv) {
 
-}, function (argv) {
+        let swaggerJsonRoute = argv.swaggerJson;
 
-  let swaggerJsonRoute = argv.swaggerJson;
+        if (!fse.pathExistsSync(swaggerJsonRoute)){
+            return Messages.swaggerJsonPathDoesNotExist()
+        }
 
-  if (!fse.pathExistsSync(swaggerJsonRoute)){
-    return Messages.swaggerJsonPathDoesNotExist()
-  }
+        // eslint-disable-next-line one-var
+        let swaggerJson = fse.readJsonSync(swaggerJsonRoute)
 
-  let swaggerJson = fse.readJsonSync(swaggerJsonRoute)
-
-  Helper.createRestModulesFromSwaggerJson(swaggerJson);
-
-})
-.help()
-.argv
+        Helper.createRestModulesFromSwaggerJson(swaggerJson);
+    })
+    .help()
+    .argv

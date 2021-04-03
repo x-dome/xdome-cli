@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 
 "use strict";
 
@@ -27,8 +28,8 @@ class Messages{
         console.log()
         console.log('Paso 2. Ejecuta alguna petición CURL:')
         console.log()
-        accessPointVerbsArray.forEach(function(itm, idx){
-          console.log('curl --request', itm ,'http://localhost:3000'+ xdomeInfo.basePath + accessPointNameRoute)
+        accessPointVerbsArray.forEach(function(itm/*, idx*/){
+            console.log('curl --request', itm ,'http://localhost:3000'+ xdomeInfo.basePath + accessPointNameRoute)
         })
         console.log('')
     }
@@ -38,7 +39,6 @@ class Messages{
         console.log('La ruta ingresada por el parámetro --swaggerJson no existe')
         console.log()
     }
-    
 }
 
 module.exports = Messages;
