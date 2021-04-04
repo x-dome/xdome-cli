@@ -18,7 +18,7 @@
     "@x-dome/xdome-base-rest": "0.1.2",
     "@x-dome/xdome-extension-rest": "0.1.2",
     "eslint": "^7.6.0",
-    "yargs": "^16.0.3"
+    "yargs": "^16.2.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.1",
