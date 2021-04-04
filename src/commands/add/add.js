@@ -1,6 +1,6 @@
 "use strict";
 
-const Helper = new (require('./../../../bin/helper'));
+const Helper        = new (require('./../../../bin/helper'));
 
 exports.command     = 'add accesspoint';
 
@@ -27,8 +27,8 @@ exports.builder     = function (yargs) {
                 choices     : ["GET", "POST", "PUT", "DELETE"],
                 type        : 'array',
             },
-        })
-        .usage("$0 add accesspoint -n Test2 -r Test2 -v POST GET")
+        });
+    // .usage("$0 add accesspoint -n Test2 -r Test2 -v POST GET")
 
     return yargs;
 };

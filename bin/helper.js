@@ -130,6 +130,9 @@ class Helper{
         xdomeInfo.accessPoints = accessPointsToAdd;
         fse.writeJsonSync( process.cwd()+'/xdome.json', xdomeInfo, {spaces: 2} )
 
+        const pluginTargetDir =  process.cwd()+'/src/plugins/';
+        fse.copySync(template_path.plugin, pluginTargetDir, {overwrite: false});
+
         Messages.onRESTModuleCreated(accessPointName, accessPointVerbsArray, xdomeInfo, accessPointNameRoute);
 
 
