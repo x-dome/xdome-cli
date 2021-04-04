@@ -1,11 +1,12 @@
+"use strict";
 module.exports                      = {
     "extends"                       : [
-        "eslint:recommended"
+        "eslint:recommended",
     ],
     "env"                           : {
         "es6"                       : true,
         "node"                      : true,
-        "mocha"                     : true
+        "mocha"                     : true,
     },
     "rules"                         : {
         "comma-style"               : ["error", "last"],
@@ -23,5 +24,5 @@ module.exports                      = {
         "no-nested-ternary"         : "error",
         "no-trailing-spaces"        : "error",
         "one-var"                   : ["error", { "const": "never", "let": "always", "var": "always" }],
-    }
+    },
 }
