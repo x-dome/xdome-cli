@@ -1,6 +1,6 @@
 {
   "name": "@x-dome/xdome-cli",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "@x-dome/xdome-cli",
   "bin": {
     "xdome": "./bin/xdome.js"
