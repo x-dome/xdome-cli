@@ -5,10 +5,12 @@ const yargs = require('yargs');
 
 const createModule  = require('./../src/commands/create/create');
 const addModule     = require('./../src/commands/add/add');
+const removeModule  = require('./../src/commands/remove/remove');
 
 yargs
     .command(createModule)
     .command(addModule)
+    .command(removeModule)
     .help()
     .hide("version")
     .hide("help")
