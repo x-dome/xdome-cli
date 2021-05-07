@@ -1,14 +1,14 @@
 /* eslint-disable one-var */
-/* eslint-disable no-console */
 
 "use strict";
-const Messages = new (require('./messages'));
-const fse = require('fs-extra');
-const fs = require('fs');
+
+const Messages      = new (require('./messages'));
+const fse           = require('fs-extra');
+const fs            = require('fs');
+const logger        = require('winston').loggers.get("xDomeLogger");
 
 class Helper{
-    constructor(){
-    }
+    constructor(){ }
 
     createRestModule(options){
 
@@ -20,17 +20,17 @@ class Helper{
 
         // validate we are in the root of a xdome project
         if ( !fs.existsSync(process.cwd()+'/xdome.json') ) {
-            console.log("")
-            console.log("Por favor valida que estás ejecutando este comando dentro de un proyecto Supervielle")
-            console.log("")
+            logger.info("")
+            logger.info("Por favor valida que estás ejecutando este comando dentro de un proyecto x-dome")
+            logger.info("")
             return;
         }
 
         // validate we find modules folder
         if ( !fs.existsSync(process.cwd()+'/src/modules') ) {
-            console.log("")
-            console.log("El instalador no encontró la carpeta 'src/modules'")
-            console.log("")
+            logger.info("")
+            logger.info("El instalador no encontró la carpeta 'src/modules'")
+            logger.info("")
             return;
         }
         // set destinationDirectory
@@ -47,7 +47,7 @@ class Helper{
             }
             catch (err) {
                 content = '';
-                console.log(err);
+                logger.info(err);
             }
             result = content.match(rex) ? true : false;
             if (result) {
@@ -57,7 +57,7 @@ class Helper{
                 }
                 catch (err) {
                     result = false;
-                    console.log(err);
+                    logger.info(err);
                 }
             }
             return result;

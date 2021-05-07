@@ -1,43 +1,43 @@
-/* eslint-disable no-console */
-
 "use strict";
+
+const logger        = require('winston').loggers.get("xDomeLogger");
 
 class Messages{
     constructor(){
     }
 
     onProjectCreated(name, projectName){
-        console.log()
-        console.log('Tu proyecto', name, 'fue creado con éxito!')
-        console.log()
-        console.log('Para iniciar tu aplicación, ejecuta:')
-        console.log()
-        console.log('cd ', projectName)
-        console.log()
-        console.log('npm install')
-        console.log()
-        console.log('node .')
-        console.log()
+        logger.info()
+        logger.info('Tu proyecto', name, 'fue creado con éxito!')
+        logger.info()
+        logger.info('Para iniciar tu aplicación, ejecuta:')
+        logger.info()
+        logger.info('cd ', projectName)
+        logger.info()
+        logger.info('npm install')
+        logger.info()
+        logger.info('node .')
+        logger.info()
     }
 
     onRESTModuleCreated(accessPointName, accessPointVerbsArray, xdomeInfo, accessPointNameRoute){
-        console.log()
-        console.log('Tu módulo REST', accessPointName, 'fue instalado. Probalo !')
-        console.log()
-        console.log('Paso 1. Ejecuta: node .')
-        console.log()
-        console.log('Paso 2. Ejecuta alguna petición CURL:')
-        console.log()
+        logger.info()
+        logger.info('Tu módulo REST', accessPointName, 'fue instalado. Probalo !')
+        logger.info()
+        logger.info('Paso 1. Ejecuta: node .')
+        logger.info()
+        logger.info('Paso 2. Ejecuta alguna petición CURL:')
+        logger.info()
         accessPointVerbsArray.forEach(function(itm/*, idx*/){
-            console.log('curl --request', itm ,'http://localhost:3000'+ xdomeInfo.basePath + accessPointNameRoute)
+            logger.info('curl --request', itm ,'http://localhost:3000'+ xdomeInfo.basePath + accessPointNameRoute)
         })
-        console.log('')
+        logger.info('')
     }
 
     swaggerJsonPathDoesNotExist(){
-        console.log()
-        console.log('La ruta ingresada por el parámetro --swaggerJson no existe')
-        console.log()
+        logger.info()
+        logger.info('La ruta ingresada por el parámetro --swaggerJson no existe')
+        logger.info()
     }
 }
 

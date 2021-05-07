@@ -11,9 +11,7 @@
   "files": [
     "/bin/*",
     "/lib/*",
-    "/src/*",
-    "LICENSE.md",
-    "README.md"
+    "/src/*"
   ],
   "scripts": {
     "lint": "eslint ."
@@ -21,10 +19,11 @@
   "preferGlobal": true,
   "license": "MIT",
   "dependencies": {
-    "fs-extra": "^9.0.1",
     "@x-dome/xdome-base-rest": "0.1.5",
     "@x-dome/xdome-extension-rest": "0.1.4",
     "eslint": "^7.6.0",
+    "fs-extra": "^9.0.1",
+    "winston": "^3.3.3",
     "yargs": "^16.2.0"
   },
   "devDependencies": {
