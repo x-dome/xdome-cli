@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 "use strict";
 
+// eslint-disable-next-line no-unused-vars
+const logger = require("./../src/commons/logger");
+
 const yargs = require('yargs');
 
 const createModule  = require('./../src/commands/create/create');
