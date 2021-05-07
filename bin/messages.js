@@ -8,11 +8,11 @@ class Messages{
 
     onProjectCreated(name, projectName){
         logger.info()
-        logger.info('Tu proyecto', name, 'fue creado con éxito!')
+        logger.info(`Tu proyecto ${name} fue creado con éxito!`)
         logger.info()
         logger.info('Para iniciar tu aplicación, ejecuta:')
         logger.info()
-        logger.info('cd ', projectName)
+        logger.info(`cd ${projectName}`)
         logger.info()
         logger.info('npm install')
         logger.info()
@@ -22,14 +22,14 @@ class Messages{
 
     onRESTModuleCreated(accessPointName, accessPointVerbsArray, xdomeInfo, accessPointNameRoute){
         logger.info()
-        logger.info('Tu módulo REST', accessPointName, 'fue instalado. Probalo !')
+        logger.info(`Tu módulo REST ${accessPointName} fue instalado. Probalo !`)
         logger.info()
         logger.info('Paso 1. Ejecuta: node .')
         logger.info()
         logger.info('Paso 2. Ejecuta alguna petición CURL:')
         logger.info()
         accessPointVerbsArray.forEach(function(itm/*, idx*/){
-            logger.info('curl --request', itm ,'http://localhost:3000'+ xdomeInfo.basePath + accessPointNameRoute)
+            logger.info(`curl --request ${itm} http://localhost:3000${xdomeInfo.basePath}${accessPointNameRoute}`)
         })
         logger.info('')
     }
